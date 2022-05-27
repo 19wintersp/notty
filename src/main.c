@@ -5,8 +5,10 @@
 int main(int argc, char* argv[]) {
 	char* argv0 = argc > 0 ? argv[0] : "notty";
 
+	if (argc < 2) goto usage;
+	if (argc > 2 && argv[1][0] == '-' && strcmp(argv[1], "--") != 0) goto usage;
+
 	if (
-		argc < 2 ||
 		strcmp(argv[1], "--help") == 0 ||
 		strcmp(argv[1], "-h") == 0
 	) {
@@ -41,5 +43,13 @@ int main(int argc, char* argv[]) {
 		return EXIT_SUCCESS;
 	}
 
+	if (argv[1][0] == '-' && strcmp(argv[1], "--") != 0) goto usage;
+
 	abort();
+
+usage:
+	fprintf(stderr, "Usage: %s [OPTION]... [--] [COMMAND [ARG]...]\n", argv0);
+	fprintf(stderr, "Try '%s --help' for more information.", argv0);
+
+	return EXIT_FAILURE;
 }
