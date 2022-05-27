@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 		strcmp(argv[1], "--help") == 0 ||
 		strcmp(argv[1], "-h") == 0
 	) {
-		printf("Usage: %s [OPTION]... [--] [COMMAND [ARG]...]\n", argv0);
+		printf("Usage: %s [OPTION]... [--] COMMAND [ARG]...\n", argv0);
 		puts("Run COMMAND with ARGS with a pseudoterminal.");
 
 		puts("");
@@ -43,13 +43,17 @@ int main(int argc, char* argv[]) {
 		return EXIT_SUCCESS;
 	}
 
-	if (argv[1][0] == '-' && strcmp(argv[1], "--") != 0) goto usage;
+	int first = 1;
+	if (strcmp(argv[1], "--") == 0) first = 2;
 
-	abort();
+	if (argc - first == 0) goto usage;
+	if (argv[1][0] == '-' && first == 1) goto usage;
+
+	return run(argv + first);
 
 usage:
 	fprintf(stderr, "Usage: %s [OPTION]... [--] [COMMAND [ARG]...]\n", argv0);
-	fprintf(stderr, "Try '%s --help' for more information.", argv0);
+	fprintf(stderr, "Try '%s --help' for more information.\n", argv0);
 
 	return EXIT_FAILURE;
 }
