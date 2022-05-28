@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 		puts("This is free software: you may change and share it.");
 		puts("There is no warranty, to the extent permitted by law.");
 		
-		return argc < 2 ? EXIT_FAILURE : EXIT_SUCCESS;
+		return EXIT_SUCCESS;
 	}
 
 	if (
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 	return run(argv + first);
 
 usage:
-	fprintf(stderr, "Usage: %s [OPTION]... [--] [COMMAND [ARG]...]\n", argv0);
+	fprintf(stderr, "Usage: %s [OPTION]... [--] COMMAND [ARG]...\n", argv0);
 	fprintf(stderr, "Try '%s --help' for more information.\n", argv0);
 
 	return EXIT_FAILURE;
