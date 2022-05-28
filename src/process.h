@@ -8,7 +8,6 @@ typedef struct {
 	pid_t pid;
 } Child;
 
-int wait(pid_t pid);
 Child launch(char* argv[]);
 
 #endif // ifndef PROCESS_H
