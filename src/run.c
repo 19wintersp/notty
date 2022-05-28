@@ -19,7 +19,7 @@ int run(char* argv[]) {
 	for (;;) {
 		struct pollfd fds[2] = {
 			{ child.pty, POLLIN, 0 },
-			{ (int) stdin, POLLIN, 0 }
+			{ fileno(stdin), POLLIN, 0 }
 		};
 
 		if (poll(fds, 2, -1) < 0) {
@@ -44,9 +44,11 @@ int run(char* argv[]) {
 		}
 
 		int status;
-		if (waitpid(child.pid, &status, 0) < 0) {
+		int result = waitpid(child.pid, &status, WNOHANG);
+
+		if (result < 0) {
 			perror("waitpid() failed");
-		} else {
+		} else if (result > 0) {
 			if (WIFEXITED(status)) return WEXITSTATUS(status);
 			if (WIFSIGNALED(status)) return WTERMSIG(status) | 0x80;
 			if (WIFSTOPPED(status)) return WSTOPSIG(status) | 0x80;
