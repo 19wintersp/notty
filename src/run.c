@@ -1,3 +1,5 @@
+#define _POSIX_SOURCE
+
 #include <poll.h>
 #include <signal.h>
 #include <stdio.h>
@@ -16,8 +18,8 @@ int run(char* argv[]) {
 
 	for (;;) {
 		struct pollfd fds[2] = {
-			{ child.pty, POLLIN },
-			{ stdin, POLLIN }
+			{ child.pty, POLLIN, 0 },
+			{ (int) stdin, POLLIN, 0 }
 		};
 
 		if (poll(fds, 2, -1) < 0) {
@@ -28,21 +30,21 @@ int run(char* argv[]) {
 		}
 
 		if (fds[0].revents & POLLIN) {
-			size_t r = read(buf, sizeof(buf), child.pty);
-			size_t w = write(buf, r, stdout);
+			size_t r = read(child.pty, buf, sizeof(buf));
+			size_t w = fwrite(buf, 1, r, stdout);
 
 			if (w != r) perror("write() failed");
 		}
 
 		if (fds[1].revents & POLLIN) {
-			size_t r = read(buf, sizeof(buf), stdin);
-			size_t w = write(buf, r, child.pty);
+			size_t r = fread(buf, 1, sizeof(buf), stdin);
+			size_t w = write(child.pty, buf, r);
 
 			if (w != r) perror("write() failed");
 		}
 
 		int status;
-		if (waitpid(child.pid, &status, NULL) < 0) {
+		if (waitpid(child.pid, &status, 0) < 0) {
 			perror("waitpid() failed");
 		} else {
 			if (WIFEXITED(status)) return WEXITSTATUS(status);

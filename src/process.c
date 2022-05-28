@@ -8,6 +8,11 @@
 
 #define EXIT_ERROR(p) { perror(p "() failed"); exit(EXIT_FAILURE); }
 
+int posix_openpt(int);
+char* ptsname(int);
+int grantpt(int);
+int unlockpt(int);
+
 Child launch(char* argv[]) {
 	int pty_master = posix_openpt(O_NOCTTY | O_RDWR);
 	if (pty_master < 0) EXIT_ERROR("openpt");

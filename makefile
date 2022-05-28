@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -std=c99 -O2 -Wall -Wextra
+CFLAGS = -std=c99 -O2 -Wall -Wextra -Wno-implicit-function-declaration
 
 OBJ = $(patsubst src/%.c, obj/%.o, $(wildcard src/*.c))
 
