@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 #include "run.h"
 #include "process.h"
@@ -27,17 +28,17 @@ int run(char* argv[]) {
 		}
 
 		if (fds[0].revents & POLLIN) {
-			size_t r = fread(buf, 1, sizeof(buf), child.pty);
-			size_t w = fwrite(buf, 1, r, stdout);
+			size_t r = read(buf, sizeof(buf), child.pty);
+			size_t w = write(buf, r, stdout);
 
-			if (w != r) perror("fwrite() failed");
+			if (w != r) perror("write() failed");
 		}
 
 		if (fds[1].revents & POLLIN) {
-			size_t r = fread(buf, 1, sizeof(buf), stdin);
-			size_t w = fwrite(buf, 1, r, child.pty);
+			size_t r = read(buf, sizeof(buf), stdin);
+			size_t w = write(buf, r, child.pty);
 
-			if (w != r) perror("fwrite() failed");
+			if (w != r) perror("write() failed");
 		}
 
 		int status;
