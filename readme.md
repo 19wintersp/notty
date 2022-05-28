@@ -53,3 +53,36 @@ To install the library system-wide, you can manually use `install`.
 ```
 install -m755 notty /usr/local/bin
 ```
+
+## Using the program
+
+NoTTY is designed to be as simple as possible. To run a program with a fake TTY,
+simply run `notty` with the command and arguments following. NoTTY provides no
+options other than help and version, however in order to disambiguate commands
+that start with a hyphen, you must instert a `--` before the command and its
+arguments.
+
+NoTTY is designed to be used by other programs, and attempting to use it via a
+regular shell is likely to be broken. Your raw input and output to the process
+standard input/output are passed directly to the pseudoterminal. Any output
+produced on standard error is from NoTTY itself, not the underlying program;
+this is simply a result of how pseudoterminals work. The exit code from NoTTY is
+ambiguous, as it returns `EXIT_FAILURE` (1 on most systems) on an internal
+error, but also passes out the exit code from the underlying process.
+
+### Examples
+
+Here are some examples of using the program. Output may differ slightly on other
+systems.
+
+The `tty` command is a core utility that prints the file name of the terminal on
+standard input.
+
+```
+$ tty
+/dev/pts/1
+$ cat | tty
+not a tty
+$ cat | notty tty
+/dev/pts/8
+```
