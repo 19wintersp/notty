@@ -2,6 +2,7 @@
 bin/
 obj/
 man/
+src/
 *.tar.gz
 notty
 *.o

@@ -45,11 +45,11 @@ The output of this should be in the "bin/" directory. You can then run the built
 binary.
 
 ```
-bin/notty
+./notty
 ```
 
 To install the library system-wide, you can manually use `install`.
 
 ```
-install -m755 bin/notty /usr/local/bin
+install -m755 notty /usr/local/bin
 ```
