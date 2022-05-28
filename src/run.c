@@ -22,7 +22,7 @@ int run(char* argv[]) {
 			{ fileno(stdin), POLLIN, 0 }
 		};
 
-		if (poll(fds, 2, -1) < 0) {
+		if (poll(fds, 2, 5) < 0) {
 			kill(child.pid, SIGTERM);
 
 			perror("poll() failed");
