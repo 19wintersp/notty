@@ -1,15 +1,12 @@
 CC = clang
 CFLAGS = -std=c99 -O2 -Wall -Wextra -Wno-implicit-function-declaration
 
-OBJ = $(patsubst src/%.c, obj/%.o, $(wildcard src/*.c))
-
 .PHONY:
-.DEFAULT: bin/notty
+.DEFAULT: notty
 
-bin/notty: $(OBJ)
-	mkdir -p $(dir $@)
-	$(CC) $(wildcard obj/*.o) -o $@
+notty: notty.o
+	$(CC) $< -o $@
+	strip $@
 
-obj/%.o: src/%.c $(wildcard src/*.h)
-	mkdir -p $(dir $@)
+notty.o: notty.c
 	$(CC) -c $< -o $@ $(CFLAGS)
