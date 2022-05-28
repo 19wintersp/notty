@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "run.h"
+
 int main(int argc, char* argv[]) {
 	char* argv0 = argc > 0 ? argv[0] : "notty";
 
